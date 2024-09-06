@@ -52,7 +52,7 @@
 
 1. **Download the Required SDKs and Tools:**
    - **Flutter SDK:** [Download Flutter SDK](https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_3.0.0-stable.zip)
-   - **Dart SDK:** [Download Dart SDK](https://storage.googleapis.com/dart-archive/channels/stable/release/2.17.0/sdk/dartsdk-macos-x64-release.zip)
+   - **Dart SDK (Optional):** [Download Dart SDK](https://storage.googleapis.com/dart-archive/channels/stable/release/2.17.0/sdk/dartsdk-macos-x64-release.zip)
    - **JDK 11.0.14:** [Download JDK](https://www.oracle.com/in/java/technologies/javase/jdk11-archive-downloads.html#license-lightbox)
 
 2. **Install SDKs:**
