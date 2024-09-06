@@ -29,8 +29,8 @@ class PresenceTile extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildTimeColumn("check in", presenceData["masuk"]),
-                _buildTimeColumn("check out", presenceData["keluar"]),
+                _buildTimeColumn("Check in", presenceData["masuk"]),
+                _buildTimeColumn("Check out", presenceData["keluar"]),
               ],
             ),
             SizedBox(height: 8),
@@ -38,7 +38,7 @@ class PresenceTile extends StatelessWidget {
               "${DateFormat.yMMMMEEEEd().format(DateTime.parse(presenceData["date"]))}",
               style: TextStyle(
                 fontSize: 12,
-                color: AppColor.secondarySoft,
+                color: AppColor.secondaryExtraSoft,
               ),
             ),
           ],

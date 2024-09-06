@@ -52,10 +52,10 @@ class HomeView extends GetView<HomeController> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "welcome back",
+                                "Welcome Back!",
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: AppColor.secondarySoft,
+                                  color: AppColor.secondaryExtraSoft,
                                 ),
                               ),
                               SizedBox(height: 4),
@@ -97,7 +97,7 @@ class HomeView extends GetView<HomeController> {
                         (user["address"] != null) ? "${user['address']}" : "Belum ada lokasi",
                         style: TextStyle(
                           fontSize: 12,
-                          color: AppColor.secondarySoft,
+                          color: AppColor.secondaryExtraSoft,
                         ),
                       ),
                     ),
@@ -121,7 +121,7 @@ class HomeView extends GetView<HomeController> {
                                     margin: EdgeInsets.only(bottom: 6),
                                     child: Text(
                                       'Distance from office',
-                                      style: TextStyle(fontSize: 10),
+                                      style: TextStyle(fontSize: 12),
                                     ),
                                   ),
                                   Obx(

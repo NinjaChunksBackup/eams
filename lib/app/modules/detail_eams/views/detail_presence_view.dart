@@ -63,43 +63,44 @@ class DetailPresenceView extends GetView<DetailPresenceController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'check in',
-                          style: TextStyle(color: Colors.white),
+                          'Check in',
+                          style: TextStyle(color: AppColor.secondaryExtraSoft),
+
                         ),
                         SizedBox(height: 4),
                         Text(
                           (presenceData["masuk"] == null) ? "-" : "${DateFormat.jm().format(DateTime.parse(presenceData["masuk"]["date"]))}",
-                          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                          style: TextStyle(color: AppColor.secondaryExtraSoft, fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                       ],
                     ),
                     //presence date
                     Text(
                       "${DateFormat.yMMMMEEEEd().format(DateTime.parse(presenceData["date"]))}",
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: AppColor.secondaryExtraSoft),
                     ),
                   ],
                 ),
                 SizedBox(height: 14),
                 Text(
                   'status',
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: AppColor.secondaryExtraSoft),
                 ),
                 SizedBox(height: 4),
                 Text(
                   (presenceData["masuk"]?["in_area"] == true) ? "In area presence" : "Outside area presence",
-                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                  style: TextStyle(color: AppColor.secondaryExtraSoft, fontSize: 16, fontWeight: FontWeight.w600),
                 ),
                 SizedBox(height: 14),
                 Text(
                   'address',
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: AppColor.secondaryExtraSoft),
                 ),
                 SizedBox(height: 4),
                 Text(
                   (presenceData["masuk"] == null) ? "-" : "${presenceData["masuk"]["address"]}",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: AppColor.secondaryExtraSoft,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                     height: 150 / 100,
@@ -131,7 +132,7 @@ class DetailPresenceView extends GetView<DetailPresenceController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'check out',
+                          'Check out',
                           style: TextStyle(color: AppColor.secondary),
                         ),
                         SizedBox(height: 4),

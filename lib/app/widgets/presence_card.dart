@@ -7,12 +7,12 @@ class PresenceCard extends StatelessWidget {
   final Map<String, dynamic>? todayPresenceData;
   PresenceCard({required this.userData, required this.todayPresenceData});
   @override
-  Widget build(BuildContext context) {
+    Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.only(left: 24, top: 24, right: 24, bottom: 16),
       decoration: BoxDecoration(
-        color: AppColor.primary,
+        color: AppColor.primarySoft,
         borderRadius: BorderRadius.circular(8),
         image: DecorationImage(
           image: AssetImage('assets/images/pattern-1.png'),
@@ -20,37 +20,43 @@ class PresenceCard extends StatelessWidget {
         ),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // job
-          Text(
-            userData["job"],
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'poppins',
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          //  Employee ID
-          Container(
-            margin: EdgeInsets.only(top: 4, bottom: 12),
-            child: Text(
-              userData["employee_id"],
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'poppins',
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 2,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Left side: Job title
+              Expanded(
+                child: Text(
+                  userData["job"],
+                  style: TextStyle(
+                    color: AppColor.secondaryExtraSoft,
+                    fontFamily: 'poppins',
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ),
-            ),
+              // Right side: Employee ID
+              Text(
+                userData["employee_id"],
+                style: TextStyle(
+                  color: AppColor.secondaryExtraSoft,
+                  fontFamily: 'poppins',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 2,
+                ),
+              ),
+            ],
           ),
+          // Add spacing here
+          SizedBox(height: 16),
           // check in - check out box
           Container(
             width: MediaQuery.of(context).size.width,
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
             decoration: BoxDecoration(
-              color: AppColor.primarySoft,
+              color: AppColor.primaryExtraSoft,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -62,10 +68,10 @@ class PresenceCard extends StatelessWidget {
                       Container(
                         margin: EdgeInsets.only(bottom: 6),
                         child: Text(
-                          "check in",
+                          "Check in",
                           style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
+                            fontSize: 14,
+                            color: AppColor.secondaryExtraSoft,
                           ),
                         ),
                       ),
@@ -74,7 +80,7 @@ class PresenceCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
-                          color: Colors.white,
+                          color: AppColor.secondaryExtraSoft,
                         ),
                       ),
                     ],
@@ -83,7 +89,7 @@ class PresenceCard extends StatelessWidget {
                 Container(
                   width: 1.5,
                   height: 24,
-                  color: Colors.white,
+                  color: AppColor.secondaryExtraSoft,
                 ),
                 // check out
                 Expanded(
@@ -92,10 +98,10 @@ class PresenceCard extends StatelessWidget {
                       Container(
                         margin: EdgeInsets.only(bottom: 6),
                         child: Text(
-                          "check out",
+                          "Check out",
                           style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
+                            fontSize: 14,
+                            color: AppColor.secondaryExtraSoft,
                           ),
                         ),
                       ),
@@ -104,7 +110,7 @@ class PresenceCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
-                          color: Colors.white,
+                          color: AppColor.secondaryExtraSoft,
                         ),
                       ),
                     ],
