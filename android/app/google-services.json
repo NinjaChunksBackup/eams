@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "671897871075",
+    "project_id": "geo-live-presence",
+    "storage_bucket": "geo-live-presence.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:671897871075:android:5a58968e29d4139e8a5bd6",
+        "android_client_info": {
+          "package_name": "com.geo.live.presence.com"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6Beg97AMjgZlakAHTFNfhP24TU0O5ecw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
