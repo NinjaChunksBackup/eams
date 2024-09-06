@@ -68,7 +68,16 @@
 - **Error 3:** If you encounter weird plugin errors, reset the plugin cache by running:
 
     ```bash
-    flutter clean && flutter pub get
+    flutter clean
+    flutter pub get
+    ```
+- **Error 4:** Still you get build failed errors:
+
+    ```bash
+    flutter clean 
+    flutter pub cache clean
+    flutter pub get
+
     ```
 
 If this doesn’t help, feel free to contact us with the issue 😃.
