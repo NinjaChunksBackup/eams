@@ -18,8 +18,8 @@
 ### Windows
 
 1. **Download the Required SDKs and Tools:**
-   - **Flutter SDK:** [Download Flutter SDK](https://storage.googleapis.com/flutter_infra_release/releases/stable/windows/flutter_windows_3.0.0-stable.zip)
-   - **Dart SDK (Optional):** [Download Dart SDK](https://storage.googleapis.com/dart-archive/channels/stable/release/2.17.0/sdk/dartsdk-windows-x64-release.zip)
+   - **Flutter SDK 3.0.0:** [Download Flutter SDK](https://storage.googleapis.com/flutter_infra_release/releases/stable/windows/flutter_windows_3.0.0-stable.zip)
+   - **Dart SDK 2.17.0 (Optional):** [Download Dart SDK](https://storage.googleapis.com/dart-archive/channels/stable/release/2.17.0/sdk/dartsdk-windows-x64-release.zip)
    - **JDK 11.0.14:** [Download JDK](https://download.oracle.com/otn/java/jdk/11.0.14+8/7e5bbbfffe8b45e59d52a96aacab2f04/jdk-11.0.14_windows-x64_bin.exe) *(Oracle Account Required)*
 
 2. **Install SDKs:**
@@ -51,8 +51,8 @@
 ### macOS
 
 1. **Download the Required SDKs and Tools:**
-   - **Flutter SDK:** [Download Flutter SDK](https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_3.0.0-stable.zip)
-   - **Dart SDK (Optional):** [Download Dart SDK](https://storage.googleapis.com/dart-archive/channels/stable/release/2.17.0/sdk/dartsdk-macos-x64-release.zip)
+   - **Flutter SDK 3.0.0:** [Download Flutter SDK](https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_3.0.0-stable.zip)
+   - **Dart SDK 2.17.0 (Optional):** [Download Dart SDK](https://storage.googleapis.com/dart-archive/channels/stable/release/2.17.0/sdk/dartsdk-macos-x64-release.zip)
    - **JDK 11.0.14:** [Download JDK](https://www.oracle.com/in/java/technologies/javase/jdk11-archive-downloads.html#license-lightbox)
 
 2. **Install SDKs:**
