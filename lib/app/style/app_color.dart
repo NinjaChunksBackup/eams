@@ -1,29 +1,32 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class AppColor {
+  // Primary colors
+  static Color primary = Color(0xFFFFCC00); // Yellow
+  static Color primarySoft = Color(0xFFFFD633); // Lighter yellow
+  static Color primaryExtraSoft = Color(0xFFFFE680); // Very light yellow
 
-  static Color primary = Color(0xFF635BFF); 
-  static Color primarySoft = Color(0xFF7578FF); 
-  static Color primaryExtraSoft = Color(0xFFC2CBFF); 
+  // Secondary colors (black shades)
+  static Color secondary = Color(0xFF04061F); // Dark blue-black
+  static Color secondarySoft = Color(0xFF1A1C2E); // Slightly lighter black
+  static Color secondaryExtraSoft = Color(0xFF2D2F3D); // Even lighter black
 
-  // Nevada shades
-  static Color secondary = Color(0xFF32383E); 
-  static Color secondarySoft = Color(0xFF636B74);
-  static Color secondaryExtraSoft = Color(0xFFDDDFE4); 
+  // White
+  static Color background = Color(0xFFF2F2F2); // Off-white
 
   // Gradient using primary colors
   static LinearGradient primaryGradient = LinearGradient(
-    colors: [primary, Color(0xFF432AD8)], 
+    colors: [primary, Color(0xFFFFB300)], // Darker yellow
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
   );
 
   // Error
-  static Color error = Color(0xFFF04438); 
+  static Color error = Color(0xFFE63946); // Red
 
   // Success
-  static Color success = Color(0xFF15B79F); 
+  static Color success = Color(0xFF2A9D8F); // Teal
 
   // Warning
-  static Color warning = Color(0xFFFB9C0C); 
+  static Color warning = Color(0xFFE9C46A); // Light orange
 }
