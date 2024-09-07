@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eams/app/modules/alert/controllers/alert_controller.dart';
+import 'package:eams/app/modules/geofencing/controllers/location_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -12,19 +14,24 @@ import 'package:eams/company_data.dart';
 
 class HomeController extends GetxController {
   RxBool isLoading = false.obs;
-  RxString officeDistance = "-".obs;
+  var officeDistance = 0.0.obs;
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   Timer? timer;
+  final LocationService _locationService = new LocationService();
+  final AlertService _alertService = new AlertService();
 
   @override
   void onInit() {
     super.onInit();
-    timer = Timer.periodic(Duration(seconds: 10), (timer) {
-      if (Get.currentRoute == Routes.HOME) {
-        getDistanceToOffice().then((value) {
-          officeDistance.value = value;
-        });
+    _startLocationUpdates();
+  }
+
+  void _startLocationUpdates() {
+    _locationService.startLocationStream((distance) {
+      officeDistance.value = distance;
+      if (distance > 200) {
+        _alertService.raiseAlert(Get.context!);
       }
     });
   }
@@ -40,12 +47,17 @@ class HomeController extends GetxController {
     }
   }
 
+  /*
   Future<String> getDistanceToOffice() async {
-    print('calleeeed');
+    print('called');
     Map<String, dynamic> determinePosition = await _determinePosition();
     if (!determinePosition["error"]) {
       Position position = determinePosition["position"];
-      double distance = Geolocator.distanceBetween(CompanyData.office['latitude'], CompanyData.office['longitude'], position.latitude, position.longitude);
+      double distance = Geolocator.distanceBetween(
+          CompanyData.office['latitude'],
+          CompanyData.office['longitude'],
+          position.latitude,
+          position.longitude);
       if (distance > 1000) {
         return "${(distance / 1000).toStringAsFixed(2)}km";
       } else {
@@ -55,6 +67,7 @@ class HomeController extends GetxController {
       return "-";
     }
   }
+  */
 
   Future<Map<String, dynamic>> _determinePosition() async {
     bool serviceEnabled;
@@ -85,7 +98,8 @@ class HomeController extends GetxController {
         // your App should show an explanatory UI now.
         // return Future.error('Location permissions are denied');
         return {
-          "message": "Tidak dapat mengakses karena anda menolak permintaan lokasi",
+          "message":
+              "Tidak dapat mengakses karena anda menolak permintaan lokasi",
           "error": true,
         };
       }
@@ -94,14 +108,16 @@ class HomeController extends GetxController {
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
       return {
-        "message": "Location permissions are permanently denied, we cannot request permissions.",
+        "message":
+            "Location permissions are permanently denied, we cannot request permissions.",
         "error": true,
       };
     }
 
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.bestForNavigation);
     return {
       "position": position,
       "message": "Berhasil mendapatkan posisi device",
@@ -116,12 +132,24 @@ class HomeController extends GetxController {
 
   Stream<QuerySnapshot<Map<String, dynamic>>> streamLastPresence() async* {
     String uid = auth.currentUser!.uid;
-    yield* firestore.collection("employee").doc(uid).collection("presence").orderBy("date", descending: true).limitToLast(5).snapshots();
+    yield* firestore
+        .collection("employee")
+        .doc(uid)
+        .collection("presence")
+        .orderBy("date", descending: true)
+        .limitToLast(5)
+        .snapshots();
   }
 
   Stream<DocumentSnapshot<Map<String, dynamic>>> streamTodayPresence() async* {
     String uid = auth.currentUser!.uid;
-    String todayDocId = DateFormat.yMd().format(DateTime.now()).replaceAll("/", "-");
-    yield* firestore.collection("employee").doc(uid).collection("presence").doc(todayDocId).snapshots();
+    String todayDocId =
+        DateFormat.yMd().format(DateTime.now()).replaceAll("/", "-");
+    yield* firestore
+        .collection("employee")
+        .doc(uid)
+        .collection("presence")
+        .doc(todayDocId)
+        .snapshots();
   }
 }

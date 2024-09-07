@@ -42,7 +42,9 @@ class HomeView extends GetView<HomeController> {
                               width: 42,
                               height: 42,
                               child: Image.network(
-                                (user["avatar"] == null || user['avatar'] == "") ? "https://ui-avatars.com/api/?name=${user['name']}/" : user['avatar'],
+                                (user["avatar"] == null || user['avatar'] == "")
+                                    ? "https://ui-avatars.com/api/?name=${user['name']}/"
+                                    : user['avatar'],
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -94,7 +96,9 @@ class HomeView extends GetView<HomeController> {
                     Container(
                       margin: EdgeInsets.only(top: 12, bottom: 24, left: 4),
                       child: Text(
-                        (user["address"] != null) ? "${user['address']}" : "Belum ada lokasi",
+                        (user["address"] != null)
+                            ? "${user['address']}"
+                            : "Belum ada lokasi",
                         style: TextStyle(
                           fontSize: 12,
                           color: AppColor.secondarySoft,
@@ -126,7 +130,9 @@ class HomeView extends GetView<HomeController> {
                                   ),
                                   Obx(
                                     () => Text(
-                                      '${controller.officeDistance.value}',
+                                      controller.officeDistance.value > 200
+                                          ? 'Exceeded'
+                                          : '${controller.officeDistance.value.toStringAsFixed(2)} m',
                                       style: TextStyle(
                                         fontSize: 24,
                                         fontFamily: 'poppins',
@@ -194,15 +200,18 @@ class HomeView extends GetView<HomeController> {
                               return Center(child: CircularProgressIndicator());
                             case ConnectionState.active:
                             case ConnectionState.done:
-                              List<QueryDocumentSnapshot<Map<String, dynamic>>> listPresence = snapshot.data!.docs;
+                              List<QueryDocumentSnapshot<Map<String, dynamic>>>
+                                  listPresence = snapshot.data!.docs;
                               return ListView.separated(
                                 itemCount: listPresence.length,
                                 shrinkWrap: true,
                                 physics: BouncingScrollPhysics(),
                                 padding: EdgeInsets.zero,
-                                separatorBuilder: (context, index) => SizedBox(height: 16),
+                                separatorBuilder: (context, index) =>
+                                    SizedBox(height: 16),
                                 itemBuilder: (context, index) {
-                                  Map<String, dynamic> presenceData = listPresence[index].data();
+                                  Map<String, dynamic> presenceData =
+                                      listPresence[index].data();
                                   return PresenceTile(
                                     presenceData: presenceData,
                                   );
