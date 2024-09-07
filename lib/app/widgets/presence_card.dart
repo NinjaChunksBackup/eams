@@ -12,7 +12,7 @@ class PresenceCard extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.only(left: 24, top: 24, right: 24, bottom: 16),
       decoration: BoxDecoration(
-        color: AppColor.primarySoft,
+        gradient: AppColor.primaryGradient,
         borderRadius: BorderRadius.circular(8),
         image: DecorationImage(
           image: AssetImage('assets/images/pattern-1.png'),
@@ -28,10 +28,11 @@ class PresenceCard extends StatelessWidget {
               // Left side: Job title
               Expanded(
                 child: Text(
-                  userData["job"],
+                  userData["job"].toString().replaceFirst(userData["job"][0], userData["job"][0].toUpperCase()),
                   style: TextStyle(
                     color: AppColor.secondaryExtraSoft,
                     fontFamily: 'poppins',
+                    fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -78,7 +79,7 @@ class PresenceCard extends StatelessWidget {
                       Text(
                         (todayPresenceData?["masuk"] == null) ? "-" : "${DateFormat.jms().format(DateTime.parse(todayPresenceData!["masuk"]["date"]))}",
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.w700,
                           color: AppColor.secondaryExtraSoft,
                         ),
@@ -108,7 +109,7 @@ class PresenceCard extends StatelessWidget {
                       Text(
                         (todayPresenceData?["keluar"] == null) ? "-" : "${DateFormat.jms().format(DateTime.parse(todayPresenceData!["keluar"]["date"]))}",
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.w700,
                           color: AppColor.secondaryExtraSoft,
                         ),

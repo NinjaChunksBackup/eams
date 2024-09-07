@@ -1,14 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:maps_launcher/maps_launcher.dart';
 import 'package:eams/app/routes/app_pages.dart';
 import 'package:eams/app/style/app_color.dart';
 import 'package:eams/app/widgets/custom_bottom_navigation_bar.dart';
 import 'package:eams/app/widgets/presence_card.dart';
 import 'package:eams/app/widgets/presence_tile.dart';
-import 'package:eams/app/widgets/toast/custom_toast.dart';
-import 'package:eams/company_data.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -18,7 +15,13 @@ class HomeView extends GetView<HomeController> {
     return Scaffold(
       bottomNavigationBar: CustomBottomNavigationBar(),
       extendBody: true,
-      body: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+      body: RefreshIndicator(
+        color: AppColor.primary,
+        onRefresh: () async {
+          await controller.calculateTotalWorkingHours(); // Refresh total working hours
+          // Optionally refresh other streams if necessary
+        },
+        child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
           stream: controller.streamUser(),
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
@@ -73,26 +76,26 @@ class HomeView extends GetView<HomeController> {
                         ],
                       ),
                     ),
-                    // section 2 -  card
+                    // Section 2 - Card
                     StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-                        stream: controller.streamTodayPresence(),
-                        builder: (context, snapshot) {
-                          // #TODO: make skeleton
-                          switch (snapshot.connectionState) {
-                            case ConnectionState.waiting:
-                              return Center(child: CircularProgressIndicator());
-                            case ConnectionState.active:
-                            case ConnectionState.done:
-                              var todayPresenceData = snapshot.data?.data();
-                              return PresenceCard(
-                                userData: user,
-                                todayPresenceData: todayPresenceData,
-                              );
-                            default:
-                              return SizedBox();
-                          }
-                        }),
-                    // last location
+                      stream: controller.streamTodayPresence(),
+                      builder: (context, snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return Center(child: CircularProgressIndicator());
+                          case ConnectionState.active:
+                          case ConnectionState.done:
+                            var todayPresenceData = snapshot.data?.data();
+                            return PresenceCard(
+                              userData: user,
+                              todayPresenceData: todayPresenceData,
+                            );
+                          default:
+                            return SizedBox();
+                        }
+                      },
+                    ),
+                    // Last location
                     Container(
                       margin: EdgeInsets.only(top: 12, bottom: 24, left: 4),
                       child: Text(
@@ -105,7 +108,7 @@ class HomeView extends GetView<HomeController> {
                         ),
                       ),
                     ),
-                    // section 3 distance & map
+                    // Section 3 - Distance & Total Working Hours
                     Container(
                       width: MediaQuery.of(context).size.width,
                       margin: EdgeInsets.only(bottom: 10),
@@ -146,24 +149,33 @@ class HomeView extends GetView<HomeController> {
                           ),
                           SizedBox(width: 16),
                           Expanded(
-                            child: GestureDetector(
-                              onTap: controller.launchOfficeOnMap,
-                              child: Container(
-                                height: 84,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: AppColor.primaryExtraSoft,
-                                  borderRadius: BorderRadius.circular(8),
-                                  image: DecorationImage(
-                                    image: AssetImage('assets/images/map.png'),
-                                    fit: BoxFit.cover,
-                                    opacity: 0.3,
+                            child: Container(
+                              height: 84,
+                              decoration: BoxDecoration(
+                                color: AppColor.primaryExtraSoft,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(bottom: 6),
+                                    child: Text(
+                                      'Total Working Hours',
+                                      style: TextStyle(fontSize: 12),
+                                    ),
                                   ),
-                                ),
-                                child: Text(
-                                  'Open in maps',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
+                                  Obx(
+                                    () => Text(
+                                      '${controller.totalWorkingHours.value} hrs',
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontFamily: 'poppins',
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -184,7 +196,7 @@ class HomeView extends GetView<HomeController> {
                           ),
                           TextButton(
                             onPressed: () => Get.toNamed(Routes.ALL_PRESENCE),
-                            child: Text("show all"),
+                            child: Text("Show All"),
                             style: TextButton.styleFrom(
                               primary: AppColor.primary,
                             ),
@@ -193,34 +205,35 @@ class HomeView extends GetView<HomeController> {
                       ),
                     ),
                     StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                        stream: controller.streamLastPresence(),
-                        builder: (context, snapshot) {
-                          switch (snapshot.connectionState) {
-                            case ConnectionState.waiting:
-                              return Center(child: CircularProgressIndicator());
-                            case ConnectionState.active:
-                            case ConnectionState.done:
-                              List<QueryDocumentSnapshot<Map<String, dynamic>>>
-                                  listPresence = snapshot.data!.docs;
-                              return ListView.separated(
-                                itemCount: listPresence.length,
-                                shrinkWrap: true,
-                                physics: BouncingScrollPhysics(),
-                                padding: EdgeInsets.zero,
-                                separatorBuilder: (context, index) =>
-                                    SizedBox(height: 16),
-                                itemBuilder: (context, index) {
-                                  Map<String, dynamic> presenceData =
-                                      listPresence[index].data();
-                                  return PresenceTile(
-                                    presenceData: presenceData,
-                                  );
-                                },
-                              );
-                            default:
-                              return SizedBox();
-                          }
-                        }),
+                      stream: controller.streamLastPresence(),
+                      builder: (context, snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return Center(child: CircularProgressIndicator());
+                          case ConnectionState.active:
+                          case ConnectionState.done:
+                            List<QueryDocumentSnapshot<Map<String, dynamic>>>
+                                listPresence = snapshot.data!.docs;
+                            return ListView.separated(
+                              itemCount: listPresence.length,
+                              shrinkWrap: true,
+                              physics: BouncingScrollPhysics(),
+                              padding: EdgeInsets.zero,
+                              separatorBuilder: (context, index) =>
+                                  SizedBox(height: 16),
+                              itemBuilder: (context, index) {
+                                Map<String, dynamic> presenceData =
+                                    listPresence[index].data();
+                                return PresenceTile(
+                                  presenceData: presenceData,
+                                );
+                              },
+                            );
+                          default:
+                            return SizedBox();
+                        }
+                      },
+                    ),
                   ],
                 );
 
@@ -229,7 +242,9 @@ class HomeView extends GetView<HomeController> {
               default:
                 return Center(child: Text("Error"));
             }
-          }),
+          },
+        ),
+      ),
     );
   }
 }

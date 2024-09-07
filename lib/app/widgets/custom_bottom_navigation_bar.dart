@@ -21,7 +21,7 @@ class CustomBottomNavigationBar extends GetView<PageIndexController> {
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 border: Border(
-                  top: BorderSide(color: AppColor.secondaryExtraSoft, width: 1),
+                  top: BorderSide(color: AppColor.primaryExtraSoft, width: 1),
                 ),
               ),
               child: BottomAppBar(
@@ -58,7 +58,7 @@ class CustomBottomNavigationBar extends GetView<PageIndexController> {
                       margin: EdgeInsets.only(top: 24),
                       alignment: Alignment.center,
                       child: Text(
-                        "Presence",
+                        "EAMS",
                         style: TextStyle(
                           fontSize: 10,
                           color: AppColor.secondary,

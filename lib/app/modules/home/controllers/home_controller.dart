@@ -7,7 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:maps_launcher/maps_launcher.dart';
 import 'package:eams/app/routes/app_pages.dart';
 import 'package:eams/app/widgets/toast/custom_toast.dart';
 import 'package:eams/company_data.dart';
@@ -15,6 +14,7 @@ import 'package:eams/company_data.dart';
 class HomeController extends GetxController {
   RxBool isLoading = false.obs;
   var officeDistance = 0.0.obs;
+  var totalWorkingHours = 0.0.obs;
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   Timer? timer;
@@ -25,6 +25,7 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     _startLocationUpdates();
+    calculateTotalWorkingHours();
   }
 
   void _startLocationUpdates() {
@@ -36,95 +37,42 @@ class HomeController extends GetxController {
     });
   }
 
-  launchOfficeOnMap() {
-    try {
-      MapsLauncher.launchCoordinates(
-        CompanyData.office['latitude'],
-        CompanyData.office['longitude'],
-      );
-    } catch (e) {
-      CustomToast.errorToast('Error', 'Error : ${e}');
-    }
-  }
+    Future<void> calculateTotalWorkingHours() async {
+      String uid = auth.currentUser!.uid;
+      QuerySnapshot<Map<String, dynamic>> presenceSnapshot = await firestore
+          .collection("employee")
+          .doc(uid)
+          .collection("presence")
+          .get();
 
-  /*
-  Future<String> getDistanceToOffice() async {
-    print('called');
-    Map<String, dynamic> determinePosition = await _determinePosition();
-    if (!determinePosition["error"]) {
-      Position position = determinePosition["position"];
-      double distance = Geolocator.distanceBetween(
-          CompanyData.office['latitude'],
-          CompanyData.office['longitude'],
-          position.latitude,
-          position.longitude);
-      if (distance > 1000) {
-        return "${(distance / 1000).toStringAsFixed(2)}km";
-      } else {
-        return "${distance.toStringAsFixed(2)}m";
+      double total = 0.0;
+
+      for (var doc in presenceSnapshot.docs) {
+        Map<String, dynamic> data = doc.data();
+        if (data['masuk'] != null && data['keluar'] != null) {
+          try {
+            String checkInString = data['masuk']['date'] as String;
+            String checkOutString = data['keluar']['date'] as String;
+            
+            DateTime checkIn = DateTime.parse(checkInString);
+            DateTime checkOut = DateTime.parse(checkOutString);
+            
+            // Calculate the difference in hours
+            Duration difference = checkOut.difference(checkIn);
+            double hours = difference.inMinutes / 60.0;
+            
+            // Add to total, rounding to 2 decimal places
+            total += double.parse(hours.toStringAsFixed(2));
+          } catch (e) {
+            print('Error calculating hours for document ${doc.id}: $e');
+            // Optionally, you can add more detailed error handling here
+          }
+        }
       }
-    } else {
-      return "-";
+
+      totalWorkingHours.value = double.parse(total.toStringAsFixed(2));
+      print('Total working hours: ${totalWorkingHours.value}');
     }
-  }
-  */
-
-  Future<Map<String, dynamic>> _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      Get.rawSnackbar(
-        title: 'GPS is off',
-        message: 'you need to turn on gps',
-        duration: Duration(seconds: 3),
-      );
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        // return Future.error('Location permissions are denied');
-        return {
-          "message":
-              "Tidak dapat mengakses karena anda menolak permintaan lokasi",
-          "error": true,
-        };
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      return {
-        "message":
-            "Location permissions are permanently denied, we cannot request permissions.",
-        "error": true,
-      };
-    }
-
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.bestForNavigation);
-    return {
-      "position": position,
-      "message": "Berhasil mendapatkan posisi device",
-      "error": false,
-    };
-  }
-
   Stream<DocumentSnapshot<Map<String, dynamic>>> streamUser() async* {
     String uid = auth.currentUser!.uid;
     yield* firestore.collection("employee").doc(uid).snapshots();

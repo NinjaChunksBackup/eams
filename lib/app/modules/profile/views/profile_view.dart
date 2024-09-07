@@ -11,6 +11,7 @@ import '../controllers/profile_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
   final pageIndexController = Get.find<PageIndexController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,159 +20,152 @@ class ProfileView extends GetView<ProfileController> {
       body: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
         stream: controller.streamUser(),
         builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return Center(child: CircularProgressIndicator());
-            case ConnectionState.active:
-            case ConnectionState.done:
-              Map<String, dynamic> userData = snapshot.data!.data()!;
-              return ListView(
-                shrinkWrap: true,
-                physics: BouncingScrollPhysics(),
-                padding: EdgeInsets.symmetric(vertical: 36),
-                children: [
-                  SizedBox(height: 16),
-                  // section 1 - profile
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      ClipOval(
-                        child: Container(
-                          width: 124,
-                          height: 124,
-                          color: AppColor.primary,
-                          child: Image.network(
-                            (userData["avatar"] == null || userData['avatar'] == "") ? "https://ui-avatars.com/api/?name=${userData['name']}/" : userData['avatar'],
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 16, bottom: 4),
-                        child: Text(
-                          userData["name"],
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                      Text(
-                        userData["job"],
-                        style: TextStyle(color: AppColor.secondarySoft),
-                      ),
-                    ],
-                  ),
-                  // section 2 - menu
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.only(top: 42),
-                    child: Column(
-                      children: [
-                        MenuTile(
-                          title: 'Update Profile',
-                          icon: SvgPicture.asset(
-                            'assets/icons/profile-1.svg',
-                          ),
-                          onTap: () => Get.toNamed(Routes.UPDATE_POFILE, arguments: userData),
-                        ),
-                        (userData["role"] == "admin")
-                            ? MenuTile(
-                                title: 'Add Employee',
-                                icon: SvgPicture.asset(
-                                  'assets/icons/people.svg',
-                                ),
-                                onTap: () => Get.toNamed(Routes.ADD_EMPLOYEE),
-                              )
-                            : SizedBox(),
-                        MenuTile(
-                          title: 'Change Password',
-                          icon: SvgPicture.asset(
-                            'assets/icons/password.svg',
-                          ),
-                          onTap: () => Get.toNamed(Routes.CHANGE_PASSWORD),
-                        ),
-                        MenuTile(
-                          isDanger: true,
-                          title: 'Sign Out',
-                          icon: SvgPicture.asset(
-                            'assets/icons/logout.svg',
-                          ),
-                          onTap: controller.logout,
-                        ),
-                        Container(
-                          height: 1,
-                          color: AppColor.primaryExtraSoft,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              );
-            default:
-              return SizedBox();
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
           }
+          if (!snapshot.hasData || snapshot.data?.data() == null) {
+            return Center(child: Text('No user data available'));
+          }
+
+          Map<String, dynamic> userData = snapshot.data!.data()!;
+          return CustomScrollView(
+            physics: BouncingScrollPhysics(),
+            slivers: [
+              SliverAppBar(
+                expandedHeight: 250, // Increased height to accommodate lower placement
+                floating: false,
+                pinned: true,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: _buildProfileHeader(userData),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: _buildProfileMenu(context, userData),
+              ),
+            ],
+          );
         },
       ),
     );
   }
-}
 
-class MenuTile extends StatelessWidget {
-  final String title;
-  final Widget icon;
-  final void Function() onTap;
-  final bool isDanger;
-  MenuTile({
-    required this.title,
-    required this.icon,
-    required this.onTap,
-    this.isDanger = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: AppColor.secondaryExtraSoft,
-              width: 1,
-            ),
-          ),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 42,
-              height: 42,
-              margin: EdgeInsets.only(right: 24),
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: AppColor.primaryExtraSoft,
-                borderRadius: BorderRadius.circular(100),
-              ),
-              child: icon,
-            ),
-            Expanded(
-              child: Text(
-                title,
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  color: (isDanger == false) ? AppColor.secondary : AppColor.error,
+  Widget _buildProfileHeader(Map<String, dynamic> userData) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: AppColor.primaryGradient,
+      ),
+      child: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.only(top: 30), // Added top padding to move content down
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircleAvatar(
+                radius: 50,
+                backgroundImage: NetworkImage(
+                  (userData["avatar"] == null || userData['avatar'] == "")
+                      ? "https://ui-avatars.com/api/?name=${userData['name']}/"
+                      : userData['avatar'],
                 ),
               ),
-            ),
-            Container(
-              margin: EdgeInsets.only(left: 24),
-              child: SvgPicture.asset(
-                'assets/icons/arrow-right.svg',
-                color: (isDanger == false) ? AppColor.secondary : AppColor.error,
+              SizedBox(height: 16),
+              Text(
+                userData["name"],
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
-            ),
-          ],
+              SizedBox(height: 8), // Added space between name and job title
+              Text(
+                userData["job"].toString().replaceFirst(userData["job"][0], userData["job"][0].toUpperCase()),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white70,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildProfileMenu(BuildContext context, Map<String, dynamic> userData) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Account Settings',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColor.secondary,
+            ),
+          ),
+          SizedBox(height: 16),
+          _buildMenuTile(
+            title: 'Update Profile',
+            icon: 'assets/icons/profile-1.svg',
+            onTap: () => Get.toNamed(Routes.UPDATE_POFILE, arguments: userData),
+          ),
+          if (userData["role"] == "admin")
+            _buildMenuTile(
+              title: 'Add Employee',
+              icon: 'assets/icons/people.svg',
+              onTap: () => Get.toNamed(Routes.ADD_EMPLOYEE),
+            ),
+          _buildMenuTile(
+            title: 'Change Password',
+            icon: 'assets/icons/password.svg',
+            onTap: () => Get.toNamed(Routes.CHANGE_PASSWORD),
+          ),
+          _buildMenuTile(
+            title: 'Sign Out',
+            icon: 'assets/icons/logout.svg',
+            onTap: controller.logout,
+            isDanger: true,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMenuTile({
+    required String title,
+    required String icon,
+    required VoidCallback onTap,
+    bool isDanger = false,
+  }) {
+    return ListTile(
+      leading: Container(
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: isDanger ? AppColor.primaryExtraSoft : AppColor.primaryExtraSoft,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: SvgPicture.asset(
+          icon,
+          color: isDanger ? AppColor.error : AppColor.primary,
+          width: 24,
+          height: 24,
+        ),
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+          color: isDanger ? AppColor.error : AppColor.secondary,
+        ),
+      ),
+      trailing: Icon(
+        Icons.chevron_right,
+        color: isDanger ? AppColor.error : AppColor.secondary,
+      ),
+      onTap: onTap,
     );
   }
 }

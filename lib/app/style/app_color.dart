@@ -30,3 +30,4 @@ class AppColor {
   // Warning
   static Color warning = Color(0xFFE9C46A); // Light orange
 }
+
