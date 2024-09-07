@@ -58,8 +58,8 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.UPDATE_POFILE,
-      page: () => UpdatePofileView(),
-      binding: UpdatePofileBinding(),
+      page: () => UpdateProfileView(),
+      binding: UpdateProfileBinding(),
     ),
     GetPage(
       name: _Paths.DETAIL_PRESENCE,

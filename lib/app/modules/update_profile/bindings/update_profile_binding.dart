@@ -1,12 +1,12 @@
 import 'package:get/get.dart';
 
-import '../controllers/update_pofile_controller.dart';
+import '../controllers/update_profile_controller.dart';
 
-class UpdatePofileBinding extends Bindings {
+class UpdateProfileBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<UpdatePofileController>(
-      () => UpdatePofileController(),
+    Get.lazyPut<UpdateProfileController>(
+      () => UpdateProfileController(),
     );
   }
 }
