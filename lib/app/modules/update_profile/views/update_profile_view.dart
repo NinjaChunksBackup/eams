@@ -4,10 +4,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:eams/app/style/app_color.dart';
 import 'package:eams/app/widgets/custom_input.dart';
-import '../controllers/update_pofile_controller.dart';
+import '../controllers/update_profile_controller.dart';
 import 'package:eams/app/style/app_color.dart';
 
-class UpdatePofileView extends GetView<UpdatePofileController> {
+class UpdateProfileView extends GetView<UpdateProfileController> {
   final Map<String, dynamic> user = Get.arguments;
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,8 @@ class UpdatePofileView extends GetView<UpdatePofileController> {
                   controller.updateProfile();
                 }
               },
-              child: Text((controller.isLoading.isFalse) ? 'Done' : 'Loading...'),
+              child:
+                  Text((controller.isLoading.isFalse) ? 'Done' : 'Loading...'),
               style: TextButton.styleFrom(
                 primary: AppColor.primary,
               ),
@@ -63,7 +64,7 @@ class UpdatePofileView extends GetView<UpdatePofileController> {
           Center(
             child: Stack(
               children: [
-                GetBuilder<UpdatePofileController>(
+                GetBuilder<UpdateProfileController>(
                   builder: (controller) {
                     if (controller.image != null) {
                       return ClipOval(
@@ -84,7 +85,9 @@ class UpdatePofileView extends GetView<UpdatePofileController> {
                           height: 98,
                           color: AppColor.primaryExtraSoft,
                           child: Image.network(
-                            (user["avatar"] == null || user['avatar'] == "") ? "https://ui-avatars.com/api/?name=${user['name']}/" : user['avatar'],
+                            (user["avatar"] == null || user['avatar'] == "")
+                                ? "https://ui-avatars.com/api/?name=${user['name']}/"
+                                : user['avatar'],
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -95,7 +98,6 @@ class UpdatePofileView extends GetView<UpdatePofileController> {
                 Positioned(
                   bottom: 0,
                   right: 0,
-                  
                   child: SizedBox(
                     width: 36,
                     height: 36,

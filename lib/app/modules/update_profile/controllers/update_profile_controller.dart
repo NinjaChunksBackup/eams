@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
 import 'package:eams/app/widgets/toast/custom_toast.dart';
 
-class UpdatePofileController extends GetxController {
+class UpdateProfileController extends GetxController {
   RxBool isLoading = false.obs;
   TextEditingController employeeidC = TextEditingController();
   TextEditingController nameC = TextEditingController();
@@ -23,7 +23,9 @@ class UpdatePofileController extends GetxController {
 
   Future<void> updateProfile() async {
     String uid = auth.currentUser!.uid;
-    if (employeeidC.text.isNotEmpty && nameC.text.isNotEmpty && emailC.text.isNotEmpty) {
+    if (employeeidC.text.isNotEmpty &&
+        nameC.text.isNotEmpty &&
+        emailC.text.isNotEmpty) {
       isLoading.value = true;
       try {
         Map<String, dynamic> data = {
@@ -44,7 +46,8 @@ class UpdatePofileController extends GetxController {
         Get.back();
         CustomToast.successToast('Success', 'Success Update Profile');
       } catch (e) {
-        CustomToast.errorToast('Error', 'Cant Update Profile. Err : ${e.toString()}');
+        CustomToast.errorToast(
+            'Error', 'Cant Update Profile. Err : ${e.toString()}');
       } finally {
         isLoading.value = false;
       }
@@ -72,7 +75,8 @@ class UpdatePofileController extends GetxController {
 
       Get.snackbar("Berhasil", "Berhasil delete avatar profile");
     } catch (e) {
-      Get.snackbar("Terjadi Kesalahan", "Tidak dapat delete avatar profile. Karena ${e.toString()}");
+      Get.snackbar("Terjadi Kesalahan",
+          "Tidak dapat delete avatar profile. Karena ${e.toString()}");
     } finally {
       update();
     }
