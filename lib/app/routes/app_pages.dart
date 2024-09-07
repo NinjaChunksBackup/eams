@@ -18,8 +18,8 @@ import 'package:eams/app/modules/new_password/bindings/new_password_binding.dart
 import 'package:eams/app/modules/new_password/views/new_password_view.dart';
 import 'package:eams/app/modules/profile/bindings/profile_binding.dart';
 import 'package:eams/app/modules/profile/views/profile_view.dart';
-import 'package:eams/app/modules/update_pofile/bindings/update_pofile_binding.dart';
-import 'package:eams/app/modules/update_pofile/views/update_pofile_view.dart';
+import 'package:eams/app/modules/update_profile/bindings/update_profile_binding.dart';
+import 'package:eams/app/modules/update_profile/views/update_profile_view.dart';
 
 part 'app_routes.dart';
 
