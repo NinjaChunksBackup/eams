@@ -4,6 +4,6 @@ import '../controllers/location_service.dart';
 class LocationBindings extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<LocationService>(() => LocationService());
+    Get.put(LocationService(), permanent: true);
   }
 }

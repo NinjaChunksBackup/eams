@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:eams/app/controllers/page_index_controller.dart';
 import 'package:eams/app/controllers/presence_controller.dart';
+import 'package:eams/app/modules/alert/controllers/alert_controller.dart';
 import 'firebase_options.dart';
 import 'package:get/get.dart';
-
+import 'package:eams/app/modules/geofencing/controllers/location_service.dart';
 import 'app/routes/app_pages.dart';
 
 void main() async {
@@ -13,8 +14,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  Get.put(LocationService(), permanent: true);
   Get.put(PresenceController(), permanent: true);
   Get.put(PageIndexController(), permanent: true);
+  Get.put(AlertService(), permanent: true);
   runApp(
     StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),

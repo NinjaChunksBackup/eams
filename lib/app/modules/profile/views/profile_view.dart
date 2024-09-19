@@ -149,7 +149,7 @@ class ProfileView extends GetView<ProfileController> {
         ),
         child: SvgPicture.asset(
           icon,
-          color: isDanger ? AppColor.error : AppColor.primary,
+          color: isDanger ? AppColor.danger : AppColor.primary,
           width: 24,
           height: 24,
         ),
@@ -158,12 +158,12 @@ class ProfileView extends GetView<ProfileController> {
         title,
         style: TextStyle(
           fontWeight: FontWeight.w500,
-          color: isDanger ? AppColor.error : AppColor.secondary,
+          color: isDanger ? AppColor.danger : AppColor.secondary,
         ),
       ),
       trailing: Icon(
         Icons.chevron_right,
-        color: isDanger ? AppColor.error : AppColor.secondary,
+        color: isDanger ? AppColor.danger : AppColor.secondary,
       ),
       onTap: onTap,
     );
