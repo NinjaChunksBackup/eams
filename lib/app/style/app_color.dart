@@ -21,13 +21,16 @@ class AppColor {
     end: Alignment.bottomCenter,
   );
 
-  // Error
-  static Color error = Color(0xFFE63946); // Red
+  // Error (bright yellow)
+  static Color error = Color(0xFFFFD633);  // Yellow
 
-  // Success
-  static Color success = Color(0xFF2A9D8F); // Teal
+  // Success (yellow-green)
+  static Color success = Color(0xFFFFD633); // Lighter yellow
 
-  // Warning
-  static Color warning = Color(0xFFE9C46A); // Light orange
+  // Warning (pale yellow)
+  static Color warning = Color(0xFFFFD633);  // Very light yellow
+
+    // Warning (pale yellow)
+  static Color danger = Color.fromARGB(255, 255, 51, 51);
+
 }
-

@@ -13,7 +13,7 @@ class CustomToast {
         children: [
           SvgPicture.asset(
             "assets/icons/info-circle.svg",
-            color: Colors.white,
+            color: Colors.red,
           ),
           SizedBox(width: 16),
           Expanded(
@@ -25,7 +25,7 @@ class CustomToast {
                   child: Text(
                     title ?? "error",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.black,
                       fontWeight: FontWeight.w500,
                       fontFamily: 'poppins',
                     ),
@@ -33,7 +33,7 @@ class CustomToast {
                 ),
                 Text(
                   message ?? "Add your error message here",
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.black),
                 ),
               ],
             ),
@@ -41,10 +41,10 @@ class CustomToast {
         ],
       ),
       backgroundColor: AppColor.error,
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 19),
       margin: EdgeInsets.symmetric(horizontal: 16),
       borderRadius: 8,
-      snackPosition: SnackPosition.TOP,
+      snackPosition: SnackPosition.BOTTOM,
     );
   }
 
@@ -57,7 +57,7 @@ class CustomToast {
         children: [
           SvgPicture.asset(
             "assets/icons/success-circle.svg",
-            color: Colors.white,
+            color: Colors.green,
           ),
           SizedBox(width: 16),
           Expanded(
@@ -69,7 +69,7 @@ class CustomToast {
                   child: Text(
                     title ?? "Success",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.black,
                       fontWeight: FontWeight.w500,
                       fontFamily: 'poppins',
                     ),
@@ -77,7 +77,7 @@ class CustomToast {
                 ),
                 Text(
                   message ?? "Add your success message here",
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.black),
                 ),
               ],
             ),
@@ -85,10 +85,10 @@ class CustomToast {
         ],
       ),
       backgroundColor: AppColor.success,
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 27),
       margin: EdgeInsets.symmetric(horizontal: 16),
       borderRadius: 8,
-      snackPosition: SnackPosition.TOP,
+      snackPosition: SnackPosition.BOTTOM,
     );
   }
 }

@@ -1,16 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../views/alert_view.dart';
 
-class AlertService {
-  void raiseAlert(BuildContext context, String message) {
-    if (Navigator.of(context).canPop()) return;
+class AlertService extends GetxService {
+  final RxBool _isAlertShowing = false.obs;
+  final RxString _currentAlertMessage = ''.obs;
+
+  void raiseAlert(BuildContext context, {String? customMessage}) {
+    if (_isAlertShowing.value) {
+      // Update the existing alert message
+      _currentAlertMessage.value = customMessage ?? 'You are outside the 200m radius of the office! Please enter the premises as soon as possible.';
+    } else {
+      _isAlertShowing.value = true;
+      _currentAlertMessage.value = customMessage ?? 'You are outside the 200m radius of the office! Please enter the premises as soon as possible.';
+      _showAlert(context);
+    }
+  }
+
+  void _showAlert(BuildContext context) {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
-        return AlertView(
-          message: message,
-        );
+        return Obx(() => AlertView(
+          message: _currentAlertMessage.value,
+          onDismiss: () {
+            _isAlertShowing.value = false;
+            Navigator.of(context).pop();
+          },
+        ));
       },
-    );
+    ).then((_) => _isAlertShowing.value = false);
   }
 }
