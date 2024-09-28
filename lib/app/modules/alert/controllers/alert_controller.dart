@@ -7,12 +7,15 @@ class AlertService extends GetxService {
   final RxString _currentAlertMessage = ''.obs;
 
   void raiseAlert(BuildContext context, {String? customMessage}) {
+    if (Navigator.of(context).canPop()) return;
+
     if (_isAlertShowing.value) {
-      // Update the existing alert message
-      _currentAlertMessage.value = customMessage ?? 'You are outside the 200m radius of the office! Please enter the premises as soon as possible.';
+      _currentAlertMessage.value = customMessage ??
+          'You are outside the 200m radius of the office! Please enter the premises as soon as possible.';
     } else {
       _isAlertShowing.value = true;
-      _currentAlertMessage.value = customMessage ?? 'You are outside the 200m radius of the office! Please enter the premises as soon as possible.';
+      _currentAlertMessage.value = customMessage ??
+          'You are outside the 200m radius of the office! Please enter the premises as soon as possible.';
       _showAlert(context);
     }
   }
@@ -23,12 +26,12 @@ class AlertService extends GetxService {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Obx(() => AlertView(
-          message: _currentAlertMessage.value,
-          onDismiss: () {
-            _isAlertShowing.value = false;
-            Navigator.of(context).pop();
-          },
-        ));
+              message: _currentAlertMessage.value,
+              onDismiss: () {
+                _isAlertShowing.value = false;
+                Navigator.of(context).pop();
+              },
+            ));
       },
     ).then((_) => _isAlertShowing.value = false);
   }
